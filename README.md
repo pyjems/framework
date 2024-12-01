@@ -1,6 +1,6 @@
-# PyJems - A Python MVC Framework
+# pyjinx - A Python MVC Framework
 
-**PyJems** is a lightweight and flexible Python framework built around the Model-View-Controller (MVC) architecture, designed to help developers build modern web applications with ease and efficiency. Inspired by the elegance of gems, PyJems combines simplicity with powerful features to provide a clean, scalable structure for your projects.
+**pyjinx** is a lightweight and flexible Python framework built around the Model-View-Controller (MVC) architecture, designed to help developers build modern web applications with ease and efficiency. Inspired by the elegance of gems, pyjinx combines simplicity with powerful features to provide a clean, scalable structure for your projects.
 
 ## Features:
 
