@@ -50,7 +50,7 @@ def main():
 
     action = sys.argv[1]
 
-    stub_directory = Path(__file__).parent / "djing" / "core"
+    stub_directory = Path(__file__).parent / "Illuminate"
 
     if not stub_directory.is_dir():
         print(f"Error: {stub_directory} is not a valid directory.")

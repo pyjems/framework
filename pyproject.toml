@@ -3,8 +3,11 @@ name = "pyjems"
 version = "0.1.0"
 description = "PyJems - Python MVC framework"
 authors = ["Krunal Dodiya <kunal.dodiya1@gmail.com>"]
+license = "MIT"
 readme = "README.md"
-
+packages = [
+  { include = "pyjems" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"

@@ -38,15 +38,15 @@ def find_extensions(
     return ext_modules
 
 
-included_directories = ["djing.core"]
+included_directories = ["Illuminate"]
 
-base_package = "djing"
+base_package = "Illuminate"
 
 base_path = os.path.join(os.path.dirname(__file__), base_package)
 
 ext_modules = find_extensions(base_package, base_path, included_directories)
 
 setup(
-    name="djing",
+    name=base_package,
     ext_modules=cythonize(ext_modules, language_level=3),
 )
