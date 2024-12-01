@@ -1,6 +1,6 @@
 import inspect
 
-from typing import Self
+from typing import Any, Self
 from Illuminate.Contracts.Foundation.Application import (
     Application as ApplicationContract,
 )
@@ -66,7 +66,13 @@ class Application:
         return self.call(command, arguments, True)
 
     def call(self, command: str, arguments: dict = {}, silent=False):
-        data = [command, *list(arguments.values())]
+        def parse_args(key: str, value: Any):
+            if key.startswith("-"):
+                return f"{key}={value}"
+
+            return value
+
+        data = [command, *[parse_args(key, value) for key, value in arguments.items()]]
 
         argv_input = ArgvInput.from_inputs(data)
 
