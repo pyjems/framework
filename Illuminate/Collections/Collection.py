@@ -1,7 +1,17 @@
 import math
 
-from typing import Any, Callable, Dict, Generic, List, Optional, Self, Tuple, Union
-from typing_extensions import TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Self,
+    Tuple,
+    Union,
+    TypeVar,
+)
 from Illuminate.Collections.Arr import Arr
 from Illuminate.Collections.Traits.EnumeratesValues import EnumeratesValues
 from Illuminate.Helpers.Util import Util
