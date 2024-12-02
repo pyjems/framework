@@ -63,6 +63,9 @@ class Gate(GateContract):
 
         user = self.resolve_user()
 
+        if user:
+            arguments.insert(0, user)
+
         auth_callback = self.get_auth_callback(ability, arguments)
 
         if not auth_callback:
