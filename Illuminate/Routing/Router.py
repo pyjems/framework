@@ -301,7 +301,7 @@ class Router:
 
     def _load_routes(self, route_resolver):
         try:
-            route_resolver(self)
+            Util.callback_with_dynamic_args(route_resolver, [self])
         except Exception as e:
             raise e
 

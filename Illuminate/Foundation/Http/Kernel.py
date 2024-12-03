@@ -148,6 +148,9 @@ class Kernel:
         if self.__app.bound("request"):
             self.__app.forget_binding("request")
 
+        if self.__app.bound("router"):
+            self.__app.forget_binding("router")
+
     def push_middleware(self, middleware):
         if middleware not in self.__middleware:
             self.__middleware.append(middleware)
