@@ -396,7 +396,7 @@ class Application(Container, ApplicationContract):
 
             return response
         except Exception as e:
-            kernel.terminate(request, response)
+            kernel.terminate(request, None)
 
             raise e
 
@@ -412,6 +412,6 @@ class Application(Container, ApplicationContract):
 
             return response
         except Exception as e:
-            kernel.terminate(input, response)
+            kernel.terminate(input, None)
 
             raise e
