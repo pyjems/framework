@@ -38,9 +38,9 @@ class ServiceProvider(ABC):
     def load_routes_from(self, loader: str):
         try:
             if loader in sys.modules:
-                importlib.reload(sys.modules[loader])
-            else:
-                importlib.import_module(loader)
+                del sys.modules[loader]
+
+            importlib.import_module(loader)
         except Exception as e:
             raise e
 
