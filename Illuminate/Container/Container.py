@@ -250,8 +250,8 @@ class Container(ABC):
     def _get_concrete(self, abstract: str, parameters: Dict[str, Any] = {}) -> Any:
         try:
             return self.__resolve(abstract, abstract, parameters)
-        except Exception as e:
-            raise BindingResolutionException(f"Error resolving class: {str(e)}")
+        except BindingResolutionException as e:
+            raise e
 
     def __resolve(
         self,
