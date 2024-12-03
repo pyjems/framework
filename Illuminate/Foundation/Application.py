@@ -385,23 +385,33 @@ class Application(Container, ApplicationContract):
         )
 
     def handle_request(self, request: Request):
-        self.make("events").dispatch(RequestReceived(request))
+        try:
+            self.make("events").dispatch(RequestReceived(request))
 
-        kernel: HttpKernelContract = self.make(HttpKernelContract)
+            kernel: HttpKernelContract = self.make(HttpKernelContract)
 
-        response = kernel.handle(request)
+            response = kernel.handle(request)
 
-        kernel.terminate(request, response)
+            kernel.terminate(request, response)
 
-        return response
+            return response
+        except Exception as e:
+            kernel.terminate(request, response)
+
+            raise e
 
     def handle_command(self, input: ArgvInput, silent=False):
-        self.set_running_in_console()
+        try:
+            self.set_running_in_console()
 
-        kernel: ConsoleKernelContract = self.make(ConsoleKernelContract)
+            kernel: ConsoleKernelContract = self.make(ConsoleKernelContract)
 
-        response = kernel.handle(input, ConsoleOutput(silent))
+            response = kernel.handle(input, ConsoleOutput(silent))
 
-        kernel.terminate(input, response)
+            kernel.terminate(input, response)
 
-        return response
+            return response
+        except Exception as e:
+            kernel.terminate(input, response)
+
+            raise e
