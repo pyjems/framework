@@ -320,7 +320,8 @@ class Container(ABC):
 
         if abstract in self.__bindings:
             del self.__bindings[abstract]
-            self.forget_instance(abstract)
+
+        self.forget_instance(abstract)
 
     def reset(self) -> None:
         self.__bindings.clear()
