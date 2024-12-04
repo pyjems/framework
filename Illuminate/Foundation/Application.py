@@ -11,6 +11,7 @@ from Illuminate.Foundation.Http.Events.RequestReceived import RequestReceived
 from Illuminate.Foundation.Providers.CommanderServiceProvider import (
     CommanderServiceProvider,
 )
+from Illuminate.Helpers.Util import Util
 from Illuminate.Http.Request import Request
 from Illuminate.Routing.ResponseFactory import ResponseFactory
 from Illuminate.Log.LogServiceProvider import LogServiceProvider
@@ -61,6 +62,7 @@ class Application(Container, ApplicationContract):
         self.__booted = False
         self.__booting_callbacks = []
         self.__booted_callbacks = []
+        self.__terminating_callbacks = []
 
         self.__service_providers = {}
 
@@ -344,6 +346,11 @@ class Application(Container, ApplicationContract):
         if self.is_booted():
             callback(self)
 
+    def terminating(self, callback) -> Self:
+        self.__terminating_callbacks.append(callback)
+
+        return self
+
     def __mark_as_registered(self, base_key):
         self.__loaded_providers[base_key] = True
 
@@ -417,4 +424,5 @@ class Application(Container, ApplicationContract):
             raise e
 
     def terminate(self):
-        pass
+        for callback in self.__terminating_callbacks:
+            Util.callback_with_dynamic_args(callback)

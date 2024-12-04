@@ -44,8 +44,8 @@ class Container(ABC):
         pass
 
     @abstractmethod
-    def reset(self) -> None:
-        """Reset the container, clearing all bindings and instances."""
+    def flush(self) -> None:
+        """flush the container, clearing all bindings and instances."""
         pass
 
     @abstractmethod

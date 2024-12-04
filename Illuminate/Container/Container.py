@@ -323,7 +323,7 @@ class Container(ABC):
 
         self.forget_instance(abstract)
 
-    def reset(self) -> None:
+    def flush(self) -> None:
         self.__bindings.clear()
         self.__instances.clear()
         self.__resolved.clear()
