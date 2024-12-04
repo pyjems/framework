@@ -1,14 +1,11 @@
 import sys
 import importlib
-import threading
 
 from abc import ABC, abstractmethod
 from Illuminate.Foundation.Console.Application import Application as Commander
 
 
 class ServiceProvider(ABC):
-    lock = threading.Lock()
-
     booting_callbacks = {}
     booted_callbacks = {}
 
@@ -39,14 +36,13 @@ class ServiceProvider(ABC):
             callbacks()
 
     def load_routes_from(self, loader: str):
-        with self.lock:
-            try:
-                if loader in sys.modules:
-                    importlib.reload(sys.modules[loader])
-                else:
-                    importlib.import_module(loader)
-            except Exception as e:
-                raise e
+        try:
+            if loader in sys.modules:
+                importlib.reload(sys.modules[loader])
+            else:
+                importlib.import_module(loader)
+        except Exception as e:
+            raise e
 
     def commands(self, *commands):
         all_commands = []
