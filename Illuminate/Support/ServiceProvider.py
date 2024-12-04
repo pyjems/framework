@@ -1,6 +1,3 @@
-import sys
-import importlib
-
 from abc import ABC, abstractmethod
 from Illuminate.Foundation.Console.Application import Application as Commander
 from Illuminate.Routing.RouteLoader import RouteLoader
@@ -41,9 +38,7 @@ class ServiceProvider(ABC):
             return
 
         try:
-            route_loader = RouteLoader()
-
-            route_loader.load_routes(loader)
+            RouteLoader.load_routes(loader)
         except Exception as e:
             raise e
 

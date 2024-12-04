@@ -1,20 +1,18 @@
+import sys
 import importlib
 
 
 class RouteLoader:
-    def __init__(self):
-        self._routes_cache = {}
-
-    def load_routes(self, loader: str):
-
-        if loader in self._routes_cache:
-            return self._routes_cache[loader]
-
+    @classmethod
+    def load_routes(cls, loader: str):
         try:
-            module = importlib.import_module(loader)
-
-            self._routes_cache[loader] = module
-
-            return module
-        except Exception as e:
+            if loader in sys.modules:
+                importlib.reload(sys.modules[loader])
+            else:
+                importlib.import_module(loader)
+        except ImportError as e:
+            print("RouteLoader.ImportError", e)
+            raise e
+        except ModuleNotFoundError as e:
+            print("RouteLoader.ModuleNotFoundError", e)
             raise e
