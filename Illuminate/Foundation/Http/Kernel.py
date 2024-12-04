@@ -145,7 +145,12 @@ class Kernel:
             raise e
 
     def terminate(self, request: Request, response: Response):
-        self.__app.reset()
+        self.__app.terminate()
+
+        if self.request_started_at == None:
+            return
+
+        self.request_started_at = None
 
     def push_middleware(self, middleware):
         if middleware not in self.__middleware:

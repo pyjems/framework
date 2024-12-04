@@ -415,3 +415,6 @@ class Application(Container, ApplicationContract):
             kernel.terminate(input, None)
 
             raise e
+
+    def terminate(self):
+        pass

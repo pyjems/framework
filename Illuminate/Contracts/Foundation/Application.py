@@ -146,6 +146,11 @@ class Application(Container):
         pass
 
     @abstractmethod
+    def terminate(self):
+        """terminate application."""
+        pass
+
+    @abstractmethod
     def running_in_console(self) -> bool:
         """handle command."""
         pass
