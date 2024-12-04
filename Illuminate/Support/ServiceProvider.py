@@ -34,9 +34,6 @@ class ServiceProvider(ABC):
             callbacks()
 
     def load_routes_from(self, loader: str):
-        if not self.app.bound("router"):
-            return
-
         try:
             RouteLoader.load_routes(loader)
         except Exception as e:
