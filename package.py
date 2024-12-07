@@ -16,10 +16,12 @@ class PackageManager:
     @staticmethod
     def add_init(root_directory: Path) -> None:
         for dirpath, dirnames, filenames in os.walk(root_directory):
-            init_file_path = Path(dirpath) / "__init__.py"
-            if not init_file_path.exists():
-                init_file_path.touch()  # Create an empty __init__.py file
-                print(f"Added: {init_file_path}")
+            if any([file.endswith(".py") for file in filenames]):
+                init_file_path = Path(dirpath) / "__init__.py"
+
+                if not init_file_path.exists():
+                    init_file_path.touch()
+                    print(f"Added: {init_file_path}")
 
 
 def main():
