@@ -6,6 +6,10 @@ class RequestAdapter(ABC):
     request: Any
 
     @abstractmethod
+    def get_host(self) -> str:
+        raise NotImplementedError("Implement get_host method")
+
+    @abstractmethod
     def get_url(self):
         raise NotImplementedError("Implement get_url method")
 

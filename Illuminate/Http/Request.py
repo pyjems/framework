@@ -108,6 +108,9 @@ class Request(InteractsWithContentTypes):
     def cookie(self, key) -> Any:
         return self.cookies().get(key)
 
+    def get_host(self) -> str:
+        return self.request_adapter.get_host()
+
     def get_url(self) -> str:
         return self.request_adapter.get_url()
 
