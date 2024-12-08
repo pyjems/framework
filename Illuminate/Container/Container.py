@@ -282,9 +282,7 @@ class Container(ABC):
                 parameters if parameters else self.get_dependencies(binding_resolver)
             )
 
-            instance = Util.callback_with_dynamic_args(
-                binding_resolver, list(dependencies.values())
-            )
+            instance = Util.callback_with_dynamic_args(binding_resolver, dependencies)
 
         if instance:
             self.__resolved[abstract] = True
@@ -295,14 +293,16 @@ class Container(ABC):
                 f"Binding Resolution Exception for key {abstract} and class {binding_resolver}"
             )
 
-    def get_dependencies(self, class_info) -> Dict[str, Any]:
+    def get_dependencies(self, class_info) -> List[Any]:
         args_info = getfullargspec(class_info)
 
-        return {
+        dependencies = {
             arg: self.make(args_info.annotations[arg])
-            for arg in args_info.args
-            if arg != "self"
+            for arg in args_info.annotations.keys()
+            if arg != "return"
         }
+
+        return list(dependencies.values())
 
     def get_resolved_dependencies(self, abstract: str) -> Dict[str, Any]:
         if abstract not in self.__resolved:

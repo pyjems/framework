@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Self
 from Illuminate.Contracts.Http.Request import Request
+from Illuminate.Helpers.Util import Util
 from Illuminate.Routing.Controllers.HasMiddleware import Middleware
 
 
@@ -91,7 +92,7 @@ class Route:
 
             dependencies = self.application.get_dependencies(action)
 
-            return action(**dependencies)
+            return Util.callback_with_dynamic_args(action, dependencies)
         except Exception as e:
             raise e
 
