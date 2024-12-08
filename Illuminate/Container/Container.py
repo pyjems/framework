@@ -1,7 +1,7 @@
 import inspect
 
 from abc import ABC
-from typing import Any, Dict, Callable, Optional
+from typing import Any, Dict, Callable, List, Optional, Union
 from inspect import signature, getfullargspec
 from Illuminate.Helpers.Util import Util
 from Illuminate.Support.builtins import array_merge
@@ -43,11 +43,20 @@ class Container(ABC):
     def singleton(self, key: str, binding_resolver: Callable) -> None:
         self.__bind(key, binding_resolver, True)
 
-    def make(self, key: str, parameters: Optional[Dict[str, Any]] = None) -> Any:
+    def make(
+        self, key: str, parameters: Optional[Union[Dict[str, Any], List[Any]]] = None
+    ) -> Any:
         return self.resolve(key, parameters)
 
-    def resolve(self, abstract: str, parameters: Optional[Dict[str, Any]] = None):
-        parameters = parameters or {}
+    def resolve(
+        self,
+        abstract: str,
+        parameters: Optional[Union[Dict[str, Any], List[Any]]] = None,
+    ):
+        if isinstance(parameters, dict):
+            parameters = list(parameters.values())
+
+        parameters = parameters or []
 
         abstract = self.get_alias(abstract)
 
@@ -227,7 +236,7 @@ class Container(ABC):
         return instance
 
     def _find_in_contextual_bindings(
-        self, abstract: str, parameters: Dict[str, Any] = {}
+        self, abstract: str, parameters: List[Any] = []
     ) -> Optional[Any]:
         binding = self.__bindings.get(abstract)
 
@@ -247,17 +256,14 @@ class Container(ABC):
 
         return instance
 
-    def _get_concrete(self, abstract: str, parameters: Dict[str, Any] = {}) -> Any:
+    def _get_concrete(self, abstract: str, parameters: List[Any] = []) -> Any:
         try:
             return self.__resolve(abstract, abstract, parameters)
         except BindingResolutionException as e:
             raise e
 
     def __resolve(
-        self,
-        abstract: str,
-        binding_resolver: Any,
-        parameters: Dict[str, Any],
+        self, abstract: str, binding_resolver: Any, parameters: List[Any] = []
     ) -> Any:
         instance = None
 
@@ -276,10 +282,13 @@ class Container(ABC):
                 parameters if parameters else self.get_dependencies(binding_resolver)
             )
 
-            instance = binding_resolver(**dependencies)
+            instance = Util.callback_with_dynamic_args(
+                binding_resolver, list(dependencies.values())
+            )
 
         if instance:
             self.__resolved[abstract] = True
+
             return instance
         else:
             raise BindingResolutionException(
