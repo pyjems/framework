@@ -1,7 +1,7 @@
 import inspect
 
 from typing import Any, Self
-from Illuminate.Contracts.Foundation.Application import (
+from Illuminate.Contracts.Foundation.Console.Application import (
     Application as ApplicationContract,
 )
 from Illuminate.Events.Dispatcher import Dispatcher

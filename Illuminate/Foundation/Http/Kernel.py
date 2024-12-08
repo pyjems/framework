@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from Illuminate.Contracts.Foundation.Application import (
+from Illuminate.Contracts.Foundation.Console.Application import (
     Application as ApplicationContract,
 )
 from Illuminate.Foundation.Http.Events.RequestHandled import RequestHandled

@@ -21,7 +21,7 @@ from Illuminate.Contracts.Http.Kernel import Kernel as HttpKernelContract
 from Illuminate.Contracts.Console.Kernel import Kernel as ConsoleKernelContract
 from Illuminate.Container.Container import Container
 from Illuminate.Contracts.Container.Container import Container as ContainerContract
-from Illuminate.Contracts.Foundation.Application import (
+from Illuminate.Contracts.Foundation.Console.Application import (
     Application as ApplicationContract,
 )
 from Illuminate.Contracts.Support.ServiceProvider import (

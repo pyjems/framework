@@ -4,7 +4,7 @@ from Illuminate.Events.Dispatcher import Dispatcher
 from Illuminate.Foundation.Console.Application import Application as Commander
 from Illuminate.Foundation.Console.Input.ArgvInput import ArgvInput
 from Illuminate.Foundation.Console.Output.ConsoleOutput import ConsoleOutput
-from Illuminate.Contracts.Foundation.Application import (
+from Illuminate.Contracts.Foundation.Console.Application import (
     Application as ApplicationContract,
 )
 from Illuminate.Foundation.Bootstrap.BootProviders import BootProviders
