@@ -58,11 +58,14 @@ class RoutingServiceProvider(ServiceProvider):
         self.__app.singleton("url", lambda_function)
 
     def _request_rebinder(self):
-        return lambda app, request: app.make("url").set_request(request)
+        def lambda_function(app: Application, request: Request):
+            return app.make("url").set_request(request)
+
+        return lambda_function
 
     def _register_redirector(self):
-        def lambda_function(app: Application):
-            return Redirector(app, app.make("url"))
+        def lambda_function(app: Application, request: Request):
+            return Redirector(app, app.make("url").set_request(request))
 
         self.__app.singleton("redirect", lambda_function)
 
