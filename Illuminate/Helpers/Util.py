@@ -68,7 +68,9 @@ class Util:
             args_count = cls.get_callback_args_count(callback)
 
             if not isinstance(args, list):
-                raise Exception("Invalid args type, must be list of arguments")
+                raise Exception(
+                    "Invalid args type, must be list of arguments for:", callback
+                )
 
             if args_count > len(args):
                 raise Exception("Invalid arguments passed")

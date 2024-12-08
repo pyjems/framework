@@ -286,13 +286,11 @@ class Container(ABC):
     def get_dependencies(self, class_info) -> List[Any]:
         args_info = getfullargspec(class_info)
 
-        dependencies = {
-            arg: self.make(args_info.annotations[arg])
+        return [
+            self.make(args_info.annotations[arg])
             for arg in args_info.annotations.keys()
             if arg != "return"
-        }
-
-        return list(dependencies.values())
+        ]
 
     def get_resolved_dependencies(self, abstract: str) -> Dict[str, Any]:
         if abstract not in self.__resolved:
