@@ -193,11 +193,14 @@ class Router:
     def _run_route_within_stack(self, route: Route, request: Request):
         middleware = self.gather_route_middleware(route)
 
+        def prepare_response(request: Request):
+            return self.prepare_response(request, route.run())
+
         output = (
             Pipeline(self.__app)
             .send(request)
             .through(middleware)
-            .then(lambda request: self.prepare_response(request, route.run()))
+            .then(prepare_response)
         )
 
         return output
@@ -220,13 +223,13 @@ class Router:
     def gather_route_middleware(self, route):
         route_middleware = route.gather_middleware()
 
-        resolved_middleware = self.__resolve_middlware(route_middleware)
+        resolved_middleware = self.__resolve_middleware(route_middleware)
 
         sorted_middleware = self.__sort_middleware_by_priorities(resolved_middleware)
 
         return sorted_middleware
 
-    def __resolve_middlware(self, middleware: List[Any]):
+    def __resolve_middleware(self, middleware: List[Any]):
         return (
             collect(middleware)
             .map(

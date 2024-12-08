@@ -121,16 +121,19 @@ class Kernel:
 
             self.__bootstrap()
 
+            def dispatch_to_router(request: Request):
+                return self.__dispatch_to_router(request)
+
             return (
                 Pipeline(self.__app)
                 .send(request)
                 .through(self.middleware)
-                .then(lambda request: self.__dispatch_to_router(request))
+                .then(dispatch_to_router)
             )
         except Exception as e:
             raise e
 
-    def __dispatch_to_router(self, request):
+    def __dispatch_to_router(self, request: Request):
         self.__app.instance("request", request)
 
         data = self.router.dispatch(request)

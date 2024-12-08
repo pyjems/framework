@@ -14,4 +14,7 @@ class AuthServiceProvider(ServiceProvider):
         pass
 
     def register_access_gate(self):
-        self.__app.singleton("gate", lambda app: Gate(self.__app))
+        def register_gate(app: Application):
+            return Gate(app)
+
+        self.__app.singleton("gate", register_gate)

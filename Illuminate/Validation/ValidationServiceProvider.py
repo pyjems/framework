@@ -8,7 +8,10 @@ class ValidationServiceProvider(ServiceProvider):
         self.__app = app
 
     def register(self):
-        self.__app.singleton("validator", lambda app: Factory(self.__app))
+        def register_factory(app: Application):
+            return Factory(app)
+
+        self.__app.singleton("validator", register_factory)
 
     def boot(self):
         pass

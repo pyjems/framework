@@ -8,7 +8,10 @@ class LogServiceProvider(ServiceProvider):
         self.__app = app
 
     def register(self):
-        self.__app.singleton("log", lambda app: LogManager(self.__app))
+        def register_log_manager(app: Application):
+            return LogManager(app)
+
+        self.__app.singleton("log", register_log_manager)
 
     def boot(self):
         pass
