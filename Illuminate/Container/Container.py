@@ -43,21 +43,16 @@ class Container(ABC):
     def singleton(self, key: str, binding_resolver: Callable) -> None:
         self.__bind(key, binding_resolver, True)
 
-    def make(
-        self, key: str, parameters: Optional[Union[Dict[str, Any], List[Any]]] = None
-    ) -> Any:
+    def make(self, key: str, parameters: Dict[str, Any] = {}) -> Any:
+        assert isinstance(parameters, dict), "Parameters must be key, value"
+
         return self.resolve(key, parameters)
 
     def resolve(
         self,
         abstract: str,
-        parameters: Optional[Union[Dict[str, Any], List[Any]]] = None,
+        parameters: Dict[str, Any] = {},
     ):
-        if isinstance(parameters, dict):
-            parameters = list(parameters.values())
-
-        parameters = parameters or []
-
         abstract = self.get_alias(abstract)
 
         self._fire_before_resolving_callbacks(abstract, parameters)
@@ -78,7 +73,7 @@ class Container(ABC):
 
         return concrete
 
-    def _get_contextual_concrete(self, abstract, parameters):
+    def _get_contextual_concrete(self, abstract: str, parameters: Dict[str, Any] = {}):
         binding = self._find_in_contextual_bindings(abstract, parameters)
 
         if binding:
@@ -95,7 +90,9 @@ class Container(ABC):
             if binding:
                 return binding
 
-    def _fire_before_resolving_callbacks(self, abstract, parameters):
+    def _fire_before_resolving_callbacks(
+        self, abstract: str, parameters: Dict[str, Any] = {}
+    ):
         self._fire_before_callback_array(
             abstract, parameters, self._global_before_resolving_callbacks
         )
@@ -256,33 +253,26 @@ class Container(ABC):
 
         return instance
 
-    def _get_concrete(self, abstract: str, parameters: List[Any] = []) -> Any:
+    def _get_concrete(self, abstract: str, parameters: Dict[str, Any] = {}) -> Any:
         try:
             return self.__resolve(abstract, abstract, parameters)
         except BindingResolutionException as e:
             raise e
 
     def __resolve(
-        self, abstract: str, binding_resolver: Any, parameters: List[Any] = []
+        self, abstract: str, binding_resolver: Any, parameters: Dict[str, Any] = {}
     ) -> Any:
-        instance = None
+        args = getfullargspec(binding_resolver).args
 
-        if inspect.isfunction(binding_resolver):
-            total_params = len(signature(binding_resolver).parameters)
+        dependencies = self.get_dependencies(binding_resolver)
 
-            if total_params >= 2:
-                instance = binding_resolver(self, parameters)
-            elif total_params == 1:
-                instance = binding_resolver(self)
-            else:
-                instance = binding_resolver()
+        if parameters:
+            if not all([arg in parameters for arg in args]):
+                raise Exception("Invalid params passed, valid params are:", args)
 
-        if inspect.isclass(binding_resolver):
-            dependencies = (
-                parameters if parameters else self.get_dependencies(binding_resolver)
-            )
+            dependencies = list(parameters.values())
 
-            instance = Util.callback_with_dynamic_args(binding_resolver, dependencies)
+        instance = Util.callback_with_dynamic_args(binding_resolver, dependencies)
 
         if instance:
             self.__resolved[abstract] = True
